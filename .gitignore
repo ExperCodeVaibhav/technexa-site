@@ -1,0 +1,8 @@
+node_modules/
+.local/
+*.part
+hts-cache/
+hts-log.txt
+.env
+.env.*
+!.env.example
