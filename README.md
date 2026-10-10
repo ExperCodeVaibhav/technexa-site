@@ -52,6 +52,20 @@ GitHub Pages is enabled with **GitHub Actions** as its source. The repository
 must be public or use a GitHub plan that supports Pages for private repositories.
 The four linked case studies' desktop and mobile media are included locally.
 
+## Hostinger
+
+Create a root-domain-ready static build with:
+
+```powershell
+npm run build:hostinger
+```
+
+Upload the **contents** of `_hostinger/` to Hostinger's `public_html/` directory.
+The generated `.htaccess` enables clean page URLs, compression, browser caching,
+and directory-index handling on Hostinger's Apache/LiteSpeed hosting. The files
+are already rooted for a custom domain, so do not use the GitHub Pages `_site/`
+output for Hostinger.
+
 ## Repairs and checks
 
 - Repaired mirrored links and absolute client navigation, including browser history.

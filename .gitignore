@@ -1,5 +1,7 @@
 node_modules/
 _site/
+_hostinger/
+*.zip
 .local/
 *.part
 hts-cache/
