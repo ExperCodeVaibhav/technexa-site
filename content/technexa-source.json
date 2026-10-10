@@ -1,0 +1,88 @@
+{
+  "source": "https://technexasolutions.in",
+  "retrieved": "2026-10-10",
+  "hero": "We Build Digital Products That Actually Grow Your Business",
+  "intro": "From high-performance websites to result-driven marketing systems” we help brands scale faster, smarter, and more efficiently.",
+  "story": "At Technexa Solutions, we combine technology and strategy to build digital experiences that don't just look good, they perform. We work with startups, founders, and growing businesses to create scalable systems that drive real results.",
+  "about": "We combine technology, strategy, and creative thinking to help startups and growing businesses build scalable digital products.",
+  "journey": "What started as a vision to simplify digital products evolved into a results-driven agency powered by code, strategy, and design.",
+  "email": "technexa@technexasolutions.in",
+  "phone": "+91-81070-25579",
+  "services": {
+    "Web Development": "Fast, modern, and conversion-focused websites built to perform across all devices.",
+    "Growth Marketing": "Data-driven strategies to increase visibility, generate leads, and grow your brand online.",
+    "Custom Development": "Tailored systems designed to solve real business problems and improve efficiency.",
+    "User Experience": "Clean, intuitive, and engaging designs that enhance user experience and retention."
+  },
+  "values": {
+    "Innovation": "We embrace emerging technologies and modern frameworks to stay ahead and deliver forward-thinking digital solutions.",
+    "Performance": "Every decision is guided by data, optimization, and measurable impact to ensure consistent growth.",
+    "Transparency": "Clear communication, honest reporting, and full visibility into every stage of our process.",
+    "Collaboration": "Strong partnerships drive stronger outcomes. We work closely with our clients to align vision, strategy, and execution."
+  },
+  "faq": [
+    [
+      "1. What services does Technexa Solutions offer?",
+      "We offer website development, digital marketing, custom software solutions, and UI/UX design all tailored for startups and growing businesses."
+    ],
+    [
+      "2. How long does a typical project take?",
+      "Most websites take 2-4 weeks, custom software solutions 4-12 weeks depending on complexity and requirements."
+    ],
+    [
+      "3. Can your services scale as our business grows?",
+      "Absolutely. Our systems are built to adapt, optimize, and scale alongside your evolving business needs."
+    ],
+    [
+      "4. Do you work with startups or only established brands?",
+      "We work with both. Our strategies are tailored to each growth stage, from emerging startups to enterprise-level organizations."
+    ],
+    [
+      "5. How long does it take to see results?",
+      "Most clients begin seeing measurable improvements within the first 30 to 60 days, depending on goals and market conditions."
+    ],
+    [
+      "6. Do you provide performance reports?",
+      "Yes, we deliver detailed reports with actionable insights, performance metrics, and strategic recommendations for every project."
+    ]
+  ],
+  "case_studies": [
+    {
+      "name": "Finova Dashboard",
+      "source": "https://technexasolutions.in/projects/finova-dashboard.html",
+      "description": "We helped the client transform raw data into actionable insights, improving decision-making and unlocking measurable performance growth.",
+      "local_route": "/projects/oryzo_ai"
+    },
+    {
+      "name": "GrowthX Marketing",
+      "source": "https://technexasolutions.in/projects/growthx-marketing.html",
+      "description": "We helped the client transform raw data into actionable insights, improving decision-making and unlocking measurable performance growth.",
+      "local_route": "/projects/atlas_motion"
+    },
+    {
+      "name": "SaaSFlow Platform",
+      "source": "https://technexasolutions.in/projects/saasflow-platform.html",
+      "description": "We implemented intelligent automation systems to streamline workflows, nurture leads, and increase operational efficiency.",
+      "local_route": "/projects/devin_ai"
+    },
+    {
+      "name": "Brandify Website",
+      "source": "https://technexasolutions.in/projects/brandify-website.html",
+      "description": "We optimized paid media campaigns with data-driven targeting and continuous testing to maximize reach, conversions, and return on investment.",
+      "local_route": "/projects/of_the_oak"
+    }
+  ],
+  "testimonials": [
+    "\"Technexa completely transformed our online presence. The website is fast, modern, and actually converts visitors into customers.\"",
+    "\"From strategy to execution, everything was data-backed and results-focused. The impact was immediate, measurable, and scalable.\"",
+    "\"They don't just build websites they build intelligent systems that continuously perform and improve.\"",
+    "\"A truly forward-thinking team. Their approach gave us clarity and confidence in every business decision.\""
+  ],
+  "implementation_notes": [
+    "Original visual assets and animation code are retained; the animated wordmark geometry is updated to TECHNEXA.",
+    "Original project IDs and local URLs are retained because the animation system uses them as asset identifiers.",
+    "Only the four published Technexa case studies appear in project navigation.",
+    "Source punctuation and claims are retained; whitespace is normalized for the existing layouts.",
+    "Contact forms open an email draft addressed to technexa@technexasolutions.in."
+  ]
+}

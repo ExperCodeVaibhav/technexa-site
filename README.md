@@ -22,9 +22,35 @@ asset is viewed. Cached assets are subsequently served from disk. The server
 listens only on the local computer.
 
 Vimeo embeds reject localhost, so Play links open the original Vimeo video in a
-new tab. External project links, Vimeo, and the newsletter use their original
-online services. Newsletter delivery has not been tested with a real submission.
+new tab. External project links use Technexa's published case studies.
+Project inquiry forms open an email draft addressed to
+`technexa@technexasolutions.in`; no mailing-list service is called.
 Local visits do not load the production Google Analytics tag.
+
+## Technexa content
+
+Content was taken from `https://technexasolutions.in` on 10 October 2026.
+`content/technexa-source.json` records the copied wording and source URLs.
+The original styles, 3D scenes, reel, project media, hover effects, and page
+transitions are retained. The animated wordmark geometry now reads TECHNEXA.
+Small text-fitting adjustments accommodate the longer case-study heading and
+FAQ copy. Existing project route/asset IDs are retained for animation compatibility;
+the project grids show the four case studies published by Technexa.
+
+Desktop/mobile rendering, menu navigation, case-study navigation, and asset
+loading were checked in Chrome. Browser-check artifacts are in `.local/`.
+
+## GitHub Pages
+
+`npm run build:pages` creates the static `_site/` output for `/sitaram/`.
+The build adapts absolute asset URLs and the animated client router to the
+repository path, including direct page loads and refreshes. The local server
+continues to serve the original root paths. No Node server is needed on Pages.
+
+`.github/workflows/pages.yml` tests, builds, and publishes pushes to `main` once
+GitHub Pages is enabled with **GitHub Actions** as its source. The repository
+must be public or use a GitHub plan that supports Pages for private repositories.
+The four linked case studies' desktop and mobile media are included locally.
 
 ## Repairs and checks
 
