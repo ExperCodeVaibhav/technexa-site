@@ -66,6 +66,22 @@ and directory-index handling on Hostinger's Apache/LiteSpeed hosting. The files
 are already rooted for a custom domain, so do not use the GitHub Pages `_site/`
 output for Hostinger.
 
+## Portfolio CMS and inquiries
+
+The public site keeps the original template and animation bundle intact. A small
+enhancement layer in `lusion.co/assets/cms/` loads editable portfolio JSON,
+adds image-backed cards for newly created projects, and connects the existing
+contact actions to a project-inquiry form.
+
+The admin interface lives at `/admin/`. It can add, edit, reorder, publish, and
+unpublish portfolio entries and manage inquiry statuses. Persistent JSON records
+are served by the separate Vercel Functions project in `cms-api/` and stored in
+a private Vercel Blob store. The API only accepts browser requests from the live
+GitHub Pages origin and requires the private admin key for management endpoints.
+
+If a clean mirror is restored, run `npm run cms:inject` once to reconnect the
+enhancement stylesheet and module to all mirrored pages.
+
 ## Repairs and checks
 
 - Repaired mirrored links and absolute client navigation, including browser history.

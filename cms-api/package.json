@@ -1,0 +1,13 @@
+{
+  "name": "technexa-cms-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.8.1",
+    "lusion-local": "file:.."
+  }
+}

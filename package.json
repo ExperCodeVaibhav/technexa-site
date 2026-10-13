@@ -8,7 +8,8 @@
     "start": "node server.mjs",
     "test": "node --test tests/*.test.mjs",
     "build:pages": "node scripts/build-pages.mjs",
-    "build:hostinger": "node scripts/build-hostinger.mjs"
+    "build:hostinger": "node scripts/build-hostinger.mjs",
+    "cms:inject": "node scripts/inject-cms.mjs"
   },
   "engines": { "node": ">=22" }
 }

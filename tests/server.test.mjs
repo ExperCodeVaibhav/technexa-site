@@ -13,7 +13,7 @@ after(() => new Promise(resolve => server.close(resolve)));
 
 test('every downloaded page works at its clean URL with resolvable local links', async () => {
   const files = await readdir(new URL('../lusion.co/', import.meta.url), { recursive: true });
-  const pages = files.filter(file => /(^|[\\/])index\.html$/.test(file));
+  const pages = files.filter(file => /(^|[\\/])index\.html$/.test(file) && !/^admin[\\/]/.test(file));
   assert.ok(pages.length >= 20);
   for (const file of pages) {
     const route = '/' + file.replaceAll('\\', '/').replace(/(^|\/)index\.html$/, '');
