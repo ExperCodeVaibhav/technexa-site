@@ -162,7 +162,11 @@ function setupContactForm() {
       status.textContent = 'Thank you — your inquiry is now in our project queue.';
     } catch (error) {
       status.className = 'cms-contact-status is-error';
-      status.textContent = error.message || 'Could not send your inquiry. Please email us directly.';
+      status.textContent = 'The admin inbox is temporarily unavailable. Opening your email app so the inquiry is not lost.';
+      const data = Object.fromEntries(new FormData(form));
+      const subject = encodeURIComponent(`Project inquiry from ${data.name || data.email}`);
+      const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\nCompany: ${data.company || '-'}\nPhone: ${data.phone || '-'}\nService: ${data.service || '-'}\n\n${data.message || ''}`);
+      window.location.href = `mailto:technexa@technexasolutions.in?subject=${subject}&body=${body}`;
     } finally {
       submit.disabled = false;
     }
