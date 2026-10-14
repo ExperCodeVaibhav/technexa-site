@@ -4,10 +4,9 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=24"
+    "node": "24.x"
   },
   "dependencies": {
-    "@vercel/blob": "^2.8.1",
-    "lusion-local": "file:.."
+    "@vercel/blob": "^2.8.1"
   }
 }

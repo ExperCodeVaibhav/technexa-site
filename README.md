@@ -74,10 +74,40 @@ adds image-backed cards for newly created projects, and connects the existing
 contact actions to a project-inquiry form.
 
 The admin interface lives at `/admin/`. It can add, edit, reorder, publish, and
-unpublish portfolio entries and manage inquiry statuses. Persistent JSON records
-are served by the separate Vercel Functions project in `cms-api/` and stored in
-a private Vercel Blob store. The API only accepts browser requests from the live
-GitHub Pages origin and requires the private admin key for management endpoints.
+unpublish portfolio entries. The inquiry inbox supports search, status filters,
+reply links, CSV export, status updates, and permanent deletion. Unsaved portfolio
+edits are tracked so reordering does not discard field changes.
+
+Persistent JSON records are served by the separate Vercel Functions project in
+`cms-api/` and stored in a private Vercel Blob store. Public portfolio reads and
+contact submissions are allowed from GitHub Pages, the Technexa root/www domains,
+and local port 3000. Portfolio writes and all inquiry-management endpoints require
+the private admin key. The key is kept only in the browser tab's session storage.
+
+### CMS API deployment setup
+
+The API project requires Node.js 24, a private Vercel Blob store, and these
+environment variables (see `cms-api/.env.example`):
+
+- `ADMIN_KEY`: a unique value of at least 20 characters, stored as a Vercel Secret.
+- `ALLOWED_ORIGINS`: comma-separated public site origins. Keep localhost entries
+  only if the production API should accept local testing.
+- `BLOB_STORE_ID`: added automatically when the private Blob store is connected.
+
+Link and deploy from the API directory after authenticating the Vercel CLI:
+
+```powershell
+cd cms-api
+npm install
+vercel link --yes --project technexa-cms-api
+vercel env pull .env.local --yes
+vercel deploy --prod
+```
+
+Do not commit `.env.local`. After deployment, verify the public read endpoint with
+an allowed `Origin` header and open `/admin/` on the deployed portfolio site. The
+contact form preserves entered values on an API failure and offers a prefilled
+email fallback instead of navigating away automatically.
 
 If a clean mirror is restored, run `npm run cms:inject` once to reconnect the
 enhancement stylesheet and module to all mirrored pages.

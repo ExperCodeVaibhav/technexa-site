@@ -1,4 +1,4 @@
-import { get, list, put } from '@vercel/blob';
+import { del, get, list, put } from '@vercel/blob';
 
 const ACCESS = 'private';
 export const PORTFOLIO_PATH = 'cms/portfolio.json';
@@ -26,6 +26,10 @@ export async function listInquiries() {
   const { blobs } = await list({ prefix: INQUIRY_PREFIX, limit: 1000 });
   const records = await Promise.all(blobs.map(blob => readRecord(blob.pathname)));
   return records.filter(Boolean).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
+export async function deleteInquiry(id) {
+  await del(inquiryPath(id));
 }
 
 export function inquiryPath(id) {

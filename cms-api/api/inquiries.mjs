@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { errorResponse, json, options, readJson, requireAdmin, requireOrigin } from '../lib/http.mjs';
-import { inquiryPath, listInquiries, readRecord, writeRecord } from '../lib/storage.mjs';
+import { deleteInquiry, inquiryPath, listInquiries, readRecord, writeRecord } from '../lib/storage.mjs';
 import { validateInquiry, validateInquiryStatus } from '../lib/validate.mjs';
 
 export function OPTIONS(request) {
@@ -41,6 +41,21 @@ export async function PATCH(request) {
     const updated = { ...record, status: validateInquiryStatus(input.status), updatedAt: new Date().toISOString() };
     await writeRecord(pathname, updated);
     return json(request, updated, 200, { 'Cache-Control': 'no-store' });
+  } catch (error) {
+    return errorResponse(request, error);
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    requireOrigin(request);
+    requireAdmin(request);
+    const input = await readJson(request, 4000);
+    const id = String(input.id || '');
+    const record = await readRecord(inquiryPath(id));
+    if (!record) throw Object.assign(new Error('Inquiry not found.'), { status: 404 });
+    await deleteInquiry(id);
+    return json(request, { ok: true, id }, 200, { 'Cache-Control': 'no-store' });
   } catch (error) {
     return errorResponse(request, error);
   }

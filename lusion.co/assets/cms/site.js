@@ -1,4 +1,4 @@
-const API_BASE = 'https://technexa-cms-api.vercel.app';
+const API_BASE = (globalThis.TECHNEXA_CMS_API || 'https://technexa-cms-api.vercel.app').replace(/\/$/, '');
 const modulePath = new URL(import.meta.url).pathname;
 const marker = '/assets/cms/site.js';
 const SITE_BASE = modulePath.endsWith(marker) ? modulePath.slice(0, -marker.length) : '';
@@ -125,7 +125,10 @@ function setupContactForm() {
   const modal = document.querySelector('#cms-contact-modal');
   const form = document.querySelector('#cms-contact-form');
   const status = document.querySelector('#cms-contact-status');
+  let previousFocus = null;
+
   const open = (email = '') => {
+    previousFocus = document.activeElement;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.documentElement.style.overflow = 'hidden';
@@ -133,12 +136,29 @@ function setupContactForm() {
     setTimeout(() => form.elements.name.focus(), 0);
   };
   const close = () => {
+    if (!modal.classList.contains('is-open')) return;
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
+    previousFocus?.focus?.();
   };
   document.querySelectorAll('[data-close-contact]').forEach(button => button.addEventListener('click', close));
-  document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+  document.addEventListener('keydown', event => {
+    if (!modal.classList.contains('is-open')) return;
+    if (event.key === 'Escape') close();
+    if (event.key !== 'Tab') return;
+    const focusable = [...modal.querySelectorAll('button, input, select, textarea, a[href]')].filter(element => !element.disabled);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
   document.querySelectorAll('a[href^="mailto:technexa@"], #end-section-title-link').forEach(link => link.addEventListener('click', event => { event.preventDefault(); open(); }));
   ['#header-menu-newsletter-form', '#footer-newsletter-form'].forEach(selector => {
     document.querySelectorAll(selector).forEach(emailForm => emailForm.addEventListener('submit', event => {
@@ -152,23 +172,39 @@ function setupContactForm() {
     status.className = 'cms-contact-status';
     status.textContent = 'Sending…';
     submit.disabled = true;
+    form.setAttribute('aria-busy', 'true');
+    const payload = Object.fromEntries(new FormData(form));
     try {
-      const payload = Object.fromEntries(new FormData(form));
-      const response = await fetch(`${API_BASE}/api/inquiries`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const response = await fetch(`${API_BASE}/api/inquiries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(15000),
+      });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error || 'Could not send your inquiry.');
+      if (!response.ok) {
+        const error = new Error(result.error || 'Could not send your inquiry.');
+        error.status = response.status;
+        throw error;
+      }
       form.reset();
       status.className = 'cms-contact-status is-success';
       status.textContent = 'Thank you — your inquiry is now in our project queue.';
     } catch (error) {
       status.className = 'cms-contact-status is-error';
-      status.textContent = 'The admin inbox is temporarily unavailable. Opening your email app so the inquiry is not lost.';
-      const data = Object.fromEntries(new FormData(form));
-      const subject = encodeURIComponent(`Project inquiry from ${data.name || data.email}`);
-      const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\nCompany: ${data.company || '-'}\nPhone: ${data.phone || '-'}\nService: ${data.service || '-'}\n\n${data.message || ''}`);
-      window.location.href = `mailto:technexa@technexasolutions.in?subject=${subject}&body=${body}`;
+      if (error.status && error.status < 500) {
+        status.textContent = error.message;
+      } else {
+        const subject = encodeURIComponent(`Project inquiry from ${payload.name || payload.email}`);
+        const body = encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\nCompany: ${payload.company || '-'}\nPhone: ${payload.phone || '-'}\nService: ${payload.service || '-'}\n\n${payload.message || ''}`);
+        const fallback = document.createElement('a');
+        fallback.href = `mailto:technexa@technexasolutions.in?subject=${subject}&body=${body}`;
+        fallback.textContent = 'Email us instead';
+        status.replaceChildren('The admin inbox is temporarily unavailable. ', fallback, '.');
+      }
     } finally {
       submit.disabled = false;
+      form.removeAttribute('aria-busy');
     }
   });
 }

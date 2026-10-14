@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
+  <meta name="technexa-cms-api" content="https://technexa-cms-api.vercel.app">
+  <meta name="referrer" content="no-referrer">
   <title>Technexa Admin</title>
   <link rel="icon" href="/assets/meta/technexa-logo.png">
   <link rel="stylesheet" href="/admin/admin.css">
@@ -41,7 +43,12 @@
         </section>
 
         <section class="tab-panel" id="inquiries-panel">
-          <div class="section-head"><div><h2>Project inquiries</h2><p>Requests submitted through the website appear here.</p></div><button class="secondary" id="refresh-inquiries" type="button">Refresh</button></div>
+          <div class="section-head"><div><h2>Project inquiries</h2><p>Search, reply, update status, export, or remove completed requests.</p></div><div class="section-actions"><button class="secondary" id="export-inquiries" type="button">Export CSV</button><button class="secondary" id="refresh-inquiries" type="button">Refresh</button></div></div>
+          <div class="inquiry-toolbar">
+            <label class="filter-field"><span>Search</span><input id="inquiry-search" type="search" placeholder="Name, email, company, service…" autocomplete="off"></label>
+            <label class="filter-field"><span>Status</span><select id="inquiry-filter"><option value="all">All inquiries</option><option value="new">New</option><option value="read">Read</option><option value="contacted">Contacted</option><option value="closed">Closed</option></select></label>
+            <p class="inquiry-summary" id="inquiry-summary" aria-live="polite"></p>
+          </div>
           <div class="inquiry-list" id="inquiry-list"></div>
           <p class="form-status" id="inquiry-status" aria-live="polite"></p>
         </section>

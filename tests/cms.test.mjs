@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { isAllowedOrigin, responseHeaders } from '../cms-api/lib/http.mjs';
 import { validateInquiry, validateInquiryStatus, validatePortfolio } from '../cms-api/lib/validate.mjs';
 
 test('portfolio validation normalizes safe editable project records', () => {
@@ -34,7 +35,23 @@ test('inquiry validation rejects bots and validates statuses', () => {
 test('public pages include the CMS enhancement and admin entry point', async () => {
   const home = await readFile(new URL('../lusion.co/index.html', import.meta.url), 'utf8');
   const admin = await readFile(new URL('../lusion.co/admin/index.html', import.meta.url), 'utf8');
+  const adminScript = await readFile(new URL('../lusion.co/admin/admin.js', import.meta.url), 'utf8');
+  const siteScript = await readFile(new URL('../lusion.co/assets/cms/site.js', import.meta.url), 'utf8');
   assert.match(home, /assets\/cms\/site\.js/);
   assert.match(home, /assets\/cms\/site\.css/);
   assert.match(admin, /Technexa Admin/);
+  assert.match(admin, /id="inquiry-search"/);
+  assert.match(adminScript, /method: 'DELETE'/);
+  assert.match(siteScript, /AbortSignal\.timeout/);
+});
+
+test('CMS CORS allows every deployed site origin and does not reflect unknown origins', () => {
+  for (const origin of ['https://expercodevaibhav.github.io', 'https://technexasolutions.in', 'https://www.technexasolutions.in', 'http://localhost:3000']) {
+    const request = new Request('https://technexa-cms-api.vercel.app/api/portfolio', { headers: { origin } });
+    assert.equal(isAllowedOrigin(request), true);
+    assert.equal(responseHeaders(request)['Access-Control-Allow-Origin'], origin);
+  }
+  const unknown = new Request('https://technexa-cms-api.vercel.app/api/portfolio', { headers: { origin: 'https://attacker.example' } });
+  assert.equal(isAllowedOrigin(unknown), false);
+  assert.equal(responseHeaders(unknown)['Access-Control-Allow-Origin'], undefined);
 });

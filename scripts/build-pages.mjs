@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -7,6 +7,7 @@ const source = path.join(workspace, 'lusion.co');
 const output = path.join(workspace, '_site');
 const base = (process.env.PAGES_BASE_PATH || '/sitaram').replace(/\/$/, '');
 if (!/^\/[a-zA-Z0-9_-]+$/.test(base)) throw new Error('PAGES_BASE_PATH must be one repository path, such as /sitaram');
+await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(source, output, { recursive: true });
 

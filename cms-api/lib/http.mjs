@@ -2,6 +2,8 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 
 const DEFAULT_ORIGINS = [
   'https://expercodevaibhav.github.io',
+  'https://technexasolutions.in',
+  'https://www.technexasolutions.in',
   'http://localhost:3000',
   'http://127.0.0.1:3000',
 ];
@@ -20,15 +22,18 @@ export function isAllowedOrigin(request) {
 
 export function responseHeaders(request, extra = {}) {
   const origin = request.headers.get('origin');
-  return {
+  const headers = {
     'Content-Type': 'application/json; charset=utf-8',
-    'Access-Control-Allow-Origin': origin && allowedOrigins().includes(origin) ? origin : allowedOrigins()[0],
     'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     'Access-Control-Max-Age': '86400',
+    'Referrer-Policy': 'no-referrer',
+    'X-Content-Type-Options': 'nosniff',
     Vary: 'Origin',
     ...extra,
   };
+  if (origin && allowedOrigins().includes(origin)) headers['Access-Control-Allow-Origin'] = origin;
+  return headers;
 }
 
 export function json(request, data, status = 200, extraHeaders = {}) {
