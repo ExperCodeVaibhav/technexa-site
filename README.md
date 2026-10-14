@@ -92,7 +92,9 @@ environment variables (see `cms-api/.env.example`):
 - `ADMIN_KEY`: a unique value of at least 20 characters, stored as a Vercel Secret.
 - `ALLOWED_ORIGINS`: comma-separated public site origins. Keep localhost entries
   only if the production API should accept local testing.
-- `BLOB_STORE_ID`: added automatically when the private Blob store is connected.
+- Blob credentials: the existing project uses `BLOB_READ_WRITE_TOKEN`; newer
+  private-store connections may inject `BLOB_STORE_ID` and use Vercel OIDC.
+  These values are managed by the Blob connection and must never be committed.
 
 Link and deploy from the API directory after authenticating the Vercel CLI:
 
