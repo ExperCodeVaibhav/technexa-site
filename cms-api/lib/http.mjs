@@ -24,7 +24,7 @@ export function responseHeaders(request, extra = {}) {
   const origin = request.headers.get('origin');
   const headers = {
     'Content-Type': 'application/json; charset=utf-8',
-    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Username, X-Admin-Password',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     'Access-Control-Max-Age': '86400',
     'Referrer-Policy': 'no-referrer',
@@ -49,12 +49,21 @@ export function requireOrigin(request) {
 }
 
 export function requireAdmin(request) {
-  const expected = process.env.ADMIN_KEY || '';
-  const supplied = request.headers.get('x-admin-key') || '';
-  if (expected.length < 20 || supplied.length < 20) throw Object.assign(new Error('Unauthorized.'), { status: 401 });
+  const expectedUsername = process.env.ADMIN_USERNAME || '';
+  const expectedPassword = process.env.ADMIN_PASSWORD || '';
+  const suppliedUsername = request.headers.get('x-admin-username') || '';
+  const suppliedPassword = request.headers.get('x-admin-password') || '';
+  if (!expectedUsername || !expectedPassword
+    || !credentialsMatch(expectedUsername, suppliedUsername)
+    || !credentialsMatch(expectedPassword, suppliedPassword)) {
+    throw Object.assign(new Error('Invalid username or password.'), { status: 401 });
+  }
+}
+
+function credentialsMatch(expected, supplied) {
   const expectedHash = createHash('sha256').update(expected).digest();
   const suppliedHash = createHash('sha256').update(supplied).digest();
-  if (!timingSafeEqual(expectedHash, suppliedHash)) throw Object.assign(new Error('Unauthorized.'), { status: 401 });
+  return timingSafeEqual(expectedHash, suppliedHash);
 }
 
 export async function readJson(request, maxBytes = 64_000) {

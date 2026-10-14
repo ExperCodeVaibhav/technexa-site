@@ -82,14 +82,16 @@ Persistent JSON records are served by the separate Vercel Functions project in
 `cms-api/` and stored in a private Vercel Blob store. Public portfolio reads and
 contact submissions are allowed from GitHub Pages, the Technexa root/www domains,
 and local port 3000. Portfolio writes and all inquiry-management endpoints require
-the private admin key. The key is kept only in the browser tab's session storage.
+the configured administrator username and password. The credentials are kept only
+in the browser tab's session storage.
 
 ### CMS API deployment setup
 
 The API project requires Node.js 24, a private Vercel Blob store, and these
 environment variables (see `cms-api/.env.example`):
 
-- `ADMIN_KEY`: a unique value of at least 20 characters, stored as a Vercel Secret.
+- `ADMIN_USERNAME` and `ADMIN_PASSWORD`: the administrator login credentials,
+  stored as Vercel Secrets.
 - `ALLOWED_ORIGINS`: comma-separated public site origins. Keep localhost entries
   only if the production API should accept local testing.
 - Blob credentials: the existing project uses `BLOB_READ_WRITE_TOKEN`; newer

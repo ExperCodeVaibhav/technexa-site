@@ -21,10 +21,13 @@
       <section class="login-card" id="login-view">
         <p class="eyebrow">Content management</p>
         <h1>One place for<br>work and inquiries.</h1>
-        <p class="intro">Enter the private admin key to manage the live portfolio and incoming project requests.</p>
+        <p class="intro">Sign in to manage the live portfolio and incoming project requests.</p>
         <form id="login-form">
-          <label for="admin-key">Admin key</label>
-          <div class="login-row"><input id="admin-key" name="key" type="password" required autocomplete="current-password"><button type="submit">Open dashboard</button></div>
+          <div class="login-row">
+            <label class="login-field" for="admin-username">Username<input id="admin-username" name="username" type="text" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+            <label class="login-field" for="admin-password">Password<input id="admin-password" name="password" type="password" required autocomplete="current-password"></label>
+            <button type="submit">Open dashboard</button>
+          </div>
           <p class="form-status" id="login-status" aria-live="polite"></p>
         </form>
       </section>

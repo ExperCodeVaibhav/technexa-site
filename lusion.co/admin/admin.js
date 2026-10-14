@@ -3,7 +3,8 @@ const SITE_MARKER = '/admin/admin.js';
 const modulePath = new URL(import.meta.url).pathname;
 const SITE_BASE = modulePath.endsWith(SITE_MARKER) ? modulePath.slice(0, -SITE_MARKER.length) : '';
 const state = {
-  key: sessionStorage.getItem('technexa-admin-key') || '',
+  username: sessionStorage.getItem('technexa-admin-username') || '',
+  password: sessionStorage.getItem('technexa-admin-password') || '',
   projects: [],
   inquiries: [],
   dirty: false,
@@ -25,7 +26,10 @@ async function request(path, options = {}) {
     cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',
-      ...(state.key ? { 'X-Admin-Key': state.key } : {}),
+      ...(state.username && state.password ? {
+        'X-Admin-Username': state.username,
+        'X-Admin-Password': state.password,
+      } : {}),
       ...(options.headers || {}),
     },
   });
@@ -256,15 +260,17 @@ async function loadDashboard() {
 $('#login-form').addEventListener('submit', async event => {
   event.preventDefault();
   const submit = event.currentTarget.querySelector('button[type="submit"]');
-  state.key = $('#admin-key').value.trim();
+  state.username = $('#admin-username').value.trim();
+  state.password = $('#admin-password').value;
   showStatus($('#login-status'), 'Checking access…');
   setBusy(submit, true, 'Connecting…');
   try {
     await loadDashboard();
-    sessionStorage.setItem('technexa-admin-key', state.key);
+    sessionStorage.setItem('technexa-admin-username', state.username);
+    sessionStorage.setItem('technexa-admin-password', state.password);
     showStatus($('#login-status'), '');
   } catch (error) {
-    state.key = '';
+    state.password = '';
     showStatus($('#login-status'), error.message, 'error');
     connection.textContent = 'Access denied';
   } finally {
@@ -274,14 +280,17 @@ $('#login-form').addEventListener('submit', async event => {
 
 logout.addEventListener('click', () => {
   if (state.dirty && !window.confirm('Discard your unpublished portfolio changes and log out?')) return;
-  sessionStorage.removeItem('technexa-admin-key');
-  state.key = '';
+  sessionStorage.removeItem('technexa-admin-username');
+  sessionStorage.removeItem('technexa-admin-password');
+  state.username = '';
+  state.password = '';
   setDirty(false);
   dashboard.hidden = true;
   logout.hidden = true;
   loginView.hidden = false;
   connection.textContent = 'Not connected';
-  $('#admin-key').value = '';
+  $('#admin-username').value = '';
+  $('#admin-password').value = '';
 });
 
 document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
@@ -370,10 +379,12 @@ window.addEventListener('beforeunload', event => {
   event.returnValue = '';
 });
 
-if (state.key) {
+if (state.username && state.password) {
   loadDashboard().catch(error => {
-    sessionStorage.removeItem('technexa-admin-key');
-    state.key = '';
+    sessionStorage.removeItem('technexa-admin-username');
+    sessionStorage.removeItem('technexa-admin-password');
+    state.username = '';
+    state.password = '';
     connection.textContent = 'Session expired';
     showStatus($('#login-status'), error.message, 'error');
   });
